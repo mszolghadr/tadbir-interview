@@ -4,7 +4,8 @@ namespace tadbir.Entities
 {
     public class Invoice
     {
-        public int Id { get; set; }
+        public long Id { get; set; }
+
         public IEnumerable<InvoiceRow> Rows { get; set; }
     }
 }

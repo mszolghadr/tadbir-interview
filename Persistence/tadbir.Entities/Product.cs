@@ -2,7 +2,7 @@
 {
     public class Product
     {
-        public int Id { get; set; }
+        public long Id { get; set; }
         public string Title { get; set; }
         public int Stock { get; set; }
         public byte DiscountPercentage { get; set; }
