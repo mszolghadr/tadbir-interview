@@ -9,7 +9,7 @@ namespace tadbir.Repository.Implementations
 {
     public abstract class GenericRepository<T> : IGenericRepository<T> where T : class
     {
-        private readonly TadbirDbContext _dbContext;
+        protected readonly TadbirDbContext _dbContext;
 
         public GenericRepository(TadbirDbContext dbContext)
         {

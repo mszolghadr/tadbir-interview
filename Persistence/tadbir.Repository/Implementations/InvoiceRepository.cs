@@ -1,3 +1,5 @@
+using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 using tadbir.Data;
 using tadbir.Entities;
 using tadbir.Repository.Interfaces;
@@ -8,6 +10,11 @@ namespace tadbir.Repository.Implementations
     {
         public InvoiceRepository(TadbirDbContext dbContext) : base(dbContext)
         {
+        }
+
+        public async Task<Invoice> GetWithRowsAsync(long invoiceId)
+        {
+            return await _dbContext.Invoices.Include(i => i.Rows).ThenInclude(r => r.Product).FirstOrDefaultAsync(i => i.Id == invoiceId);
         }
     }
 }
