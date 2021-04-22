@@ -28,6 +28,8 @@ namespace tadbir.Service.DTOs
             CreateMap<InvoiceRowDto, InvoiceRow>();
 
             CreateMap<InvoiceRow, DetailedInvoiceRowDto>();//.ForMember(d => d.ProductTitle, options => options.MapFrom(r => r.Product.Title))
+
+            CreateMap<Invoice, InvoiceListDto>();
             #endregion
         }
     }

@@ -15,7 +15,6 @@ import { ConfirmModalComponent } from '../shared/confirm-modal.component';
 export class ProductComponent {
   products: Product[];
   form: FormGroup;
-  toasts: ToastMessage[] = [];
   page = 1;
   pageSize = 10;
   /**
@@ -80,9 +79,5 @@ export class ProductComponent {
 
   showError(error: any) {
     this.toastService.showDanger(error.error.title);
-  }
-
-  close() {
-    this.toasts = [];
   }
 }

@@ -11,6 +11,7 @@ import { ProductComponent } from './product/product.component';
 import { FetchDataComponent as InvoiceComponent } from './invoice/invoice.component';
 import { NgbModalModule, NgbModule, NgbToastModule } from '@ng-bootstrap/ng-bootstrap';
 import { ToastsContainerComponent } from './shared/toast-container.component';
+import { PersianDatePipe } from './shared/persian-date.pipe';
 
 @NgModule({
   declarations: [
@@ -20,6 +21,7 @@ import { ToastsContainerComponent } from './shared/toast-container.component';
     ProductComponent,
     InvoiceComponent,
     ToastsContainerComponent,
+    PersianDatePipe,
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
