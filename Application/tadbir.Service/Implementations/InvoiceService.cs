@@ -23,18 +23,14 @@ namespace tadbir.Service.Implementations
         {
             var entity = _mapper.Map<Invoice>(invoiceDto);
             _invoiceRepository.Add(entity);
-            entity.Rows = new List<InvoiceRow>();
 
+            entity.Rows = new List<InvoiceRow>();
             foreach (var item in invoiceDto.Rows)
             {
-                entity.Rows.Append(new InvoiceRow
-                {
-                    Invoice = entity,
-                    ProductId = item.ProductId,
-                    Quantity = item.Quantity
-                });
+                entity.Rows.Add(_mapper.Map<InvoiceRow>(item));
             }
             await _unitOfWork.CommitAsync();
+            entity = await _invoiceRepository.GetWithRowsAsync(entity.Id);
             return _mapper.Map<DetailedInvoiceDto>(entity);
         }
 
@@ -47,6 +43,8 @@ namespace tadbir.Service.Implementations
         public async Task<DetailedInvoiceDto> EditInvoiceAsync(InvoiceDto invoiceDto, long invoiceId, CancellationToken cancellationToken)
         {
             var entity = await _invoiceRepository.GetWithRowsAsync(invoiceId);
+            if (entity == null)
+                throw new KeyNotFoundException();
             _mapper.Map(invoiceDto, entity);
 
             await _invoiceRepository.UpdateAsync(entity, invoiceId);

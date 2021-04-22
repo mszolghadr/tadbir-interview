@@ -34,7 +34,7 @@ namespace tadbir.Repository.Implementations
 
         public virtual async Task<T> GetAsync(object key, CancellationToken cancellationToken)
         {
-            return await _dbContext.Set<T>().FindAsync(key, cancellationToken);
+            return await _dbContext.Set<T>().FindAsync(new object[] { key }, cancellationToken);
         }
 
         public virtual T Add(T t)
@@ -73,7 +73,7 @@ namespace tadbir.Repository.Implementations
         {
             if (t == null)
                 return null;
-            T exist = await _dbContext.Set<T>().FindAsync(key, cancellationToken);
+            T exist = await _dbContext.Set<T>().FindAsync(new object[] { key }, cancellationToken);
             if (exist != null)
             {
                 _dbContext.Entry(exist).CurrentValues.SetValues(t);

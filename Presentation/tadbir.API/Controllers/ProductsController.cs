@@ -11,7 +11,7 @@ namespace tadbir.API.Controllers
 {
 
     [ApiController]
-    [Route("[controller]")]
+    [Route("api/[controller]")]
     public class ProductsController : ControllerBase
     {
         private readonly ILogger<ProductsController> _logger;
@@ -39,16 +39,28 @@ namespace tadbir.API.Controllers
 
         [HttpGet("{id}")]
         [ProducesResponseType(typeof(ProductDto), (int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.NotFound)]
         public async Task<IActionResult> GetProduct(long id, CancellationToken cancellationToken)
         {
-            return Ok(await _productService.GetProductAsync(id, cancellationToken));
+            var product = await _productService.GetProductAsync(id, cancellationToken);
+            if (product == null)
+                return NotFound();
+            return Ok(product);
         }
 
         [HttpPut("{id}")]
         [ProducesResponseType(typeof(ProductDto), (int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.NotFound)]
         public async Task<IActionResult> EditProduct(long id, ProductDto dto, CancellationToken cancellationToken)
         {
-            return Ok(await _productService.EditProductAsync(dto, id, cancellationToken));
+            try
+            {
+                return Ok(await _productService.EditProductAsync(dto, id, cancellationToken));
+            }
+            catch (KeyNotFoundException)
+            {
+                return NotFound();
+            }
         }
 
         [HttpDelete("{id}")]

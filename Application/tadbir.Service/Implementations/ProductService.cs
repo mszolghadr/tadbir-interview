@@ -35,6 +35,8 @@ namespace tadbir.Service.Implementations
         public async Task<ProductDto> EditProductAsync(ProductDto productDto, long productId, CancellationToken cancellationToken)
         {
             var entity = await _productRepository.GetAsync(productId);
+            if (entity == null)
+                throw new KeyNotFoundException();
             _mapper.Map(productDto, entity);
             await _productRepository.UpdateAsync(entity, productId);
             await _unitOfWork.CommitAsync();

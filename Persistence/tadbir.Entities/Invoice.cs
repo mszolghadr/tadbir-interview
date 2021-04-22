@@ -15,6 +15,6 @@ namespace tadbir.Entities
 
         public string Description { get; set; }
 
-        public IEnumerable<InvoiceRow> Rows { get; set; }
+        public List<InvoiceRow> Rows { get; set; }
     }
 }
