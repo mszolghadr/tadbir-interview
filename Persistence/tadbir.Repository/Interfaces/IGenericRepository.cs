@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace tadbir.Repository.Interfaces
@@ -10,19 +11,19 @@ namespace tadbir.Repository.Interfaces
 
         void Delete(T entity);
 
-        Task DeleteAsync(object key);
+        Task DeleteAsync(object key, CancellationToken cancellationToken = default);
 
         T Get(object key);
 
         IQueryable<T> GetAll();
 
-        Task<ICollection<T>> GetAllAsync();
+        Task<ICollection<T>> GetAllAsync(CancellationToken cancellationToken = default);
 
-        Task<T> GetAsync(object key);
+        Task<T> GetAsync(object key, CancellationToken cancellationToken = default);
 
         T Update(T t, object key);
 
-        Task<T> UpdateAsync(T t, object key);
+        Task<T> UpdateAsync(T t, object key, CancellationToken cancellationToken = default);
     }
 
 }

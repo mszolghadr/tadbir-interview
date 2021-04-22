@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using tadbir.Data;
@@ -21,9 +22,9 @@ namespace tadbir.Repository.Implementations
             return _dbContext.Set<T>();
         }
 
-        public virtual async Task<ICollection<T>> GetAllAsync()
+        public virtual async Task<ICollection<T>> GetAllAsync(CancellationToken cancellationToken)
         {
-            return await _dbContext.Set<T>().ToListAsync();
+            return await _dbContext.Set<T>().ToListAsync(cancellationToken);
         }
 
         public virtual T Get(object key)
@@ -31,9 +32,9 @@ namespace tadbir.Repository.Implementations
             return _dbContext.Set<T>().Find(key);
         }
 
-        public virtual async Task<T> GetAsync(object key)
+        public virtual async Task<T> GetAsync(object key, CancellationToken cancellationToken)
         {
-            return await _dbContext.Set<T>().FindAsync(key);
+            return await _dbContext.Set<T>().FindAsync(key, cancellationToken);
         }
 
         public virtual T Add(T t)
@@ -47,9 +48,9 @@ namespace tadbir.Repository.Implementations
             _dbContext.Set<T>().Remove(entity);
         }
 
-        public virtual async Task DeleteAsync(object key)
+        public virtual async Task DeleteAsync(object key, CancellationToken cancellationToken)
         {
-            T exist = await _dbContext.Set<T>().FindAsync(key);
+            T exist = await _dbContext.Set<T>().FindAsync(key, cancellationToken);
             if (exist != null)
             {
                 _dbContext.Set<T>().Remove(exist);
@@ -68,11 +69,11 @@ namespace tadbir.Repository.Implementations
             return exist;
         }
 
-        public virtual async Task<T> UpdateAsync(T t, object key)
+        public virtual async Task<T> UpdateAsync(T t, object key, CancellationToken cancellationToken)
         {
             if (t == null)
                 return null;
-            T exist = await _dbContext.Set<T>().FindAsync(key);
+            T exist = await _dbContext.Set<T>().FindAsync(key, cancellationToken);
             if (exist != null)
             {
                 _dbContext.Entry(exist).CurrentValues.SetValues(t);

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Net;
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -21,11 +22,40 @@ namespace tadbir.API.Controllers
             _invoiceService = invoiceService;
         }
 
-        [HttpGet]
-        [ProducesResponseType(typeof(IEnumerable<DetailedInvoiceDto>), (int)HttpStatusCode.OK)]
-        public async Task<ActionResult<IEnumerable<DetailedInvoiceDto>>> Get()
+        [HttpPost]
+        [ProducesResponseType(typeof(DetailedInvoiceDto), (int)HttpStatusCode.OK)]
+        public async Task<IActionResult> AddNewInvoice(InvoiceDto dto, CancellationToken cancellationToken)
         {
-            return Ok(await _invoiceService.GetInvoiceListAsync());
+            return Ok(await _invoiceService.AddNewInvoiceAsync(dto, cancellationToken));
+        }
+
+        [HttpGet]
+        [ProducesResponseType(typeof(IEnumerable<InvoiceListDto>), (int)HttpStatusCode.OK)]
+        public async Task<IActionResult> Get(CancellationToken cancellationToken)
+        {
+            return Ok(await _invoiceService.GetInvoiceListAsync(cancellationToken));
+        }
+
+        [HttpGet("{id}")]
+        [ProducesResponseType(typeof(DetailedInvoiceDto), (int)HttpStatusCode.OK)]
+        public async Task<IActionResult> GetProduct(long id, CancellationToken cancellationToken)
+        {
+            return Ok(await _invoiceService.GetInvoiceAsync(id, cancellationToken));
+        }
+
+        [HttpPut("{id}")]
+        [ProducesResponseType(typeof(DetailedInvoiceDto), (int)HttpStatusCode.OK)]
+        public async Task<IActionResult> EditProduct(long id, InvoiceDto dto, CancellationToken cancellationToken)
+        {
+            return Ok(await _invoiceService.EditInvoiceAsync(dto, id, cancellationToken));
+        }
+
+        [HttpDelete("{id}")]
+        [ProducesResponseType(typeof(void), (int)HttpStatusCode.NoContent)]
+        public async Task<IActionResult> DeleteProduct(long id, CancellationToken cancellationToken)
+        {
+            await _invoiceService.DeleteInvoiceAsync(id, cancellationToken);
+            return NoContent();
         }
     }
 }

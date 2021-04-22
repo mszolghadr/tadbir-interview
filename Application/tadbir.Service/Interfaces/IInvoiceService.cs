@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using tadbir.Service.DTOs.InvoiceDTOs;
 
@@ -6,10 +7,10 @@ namespace tadbir.Service.Interfaces
 {
     public interface IInvoiceService
     {
-        Task<DetailedInvoiceDto> AddNewInvoiceAsync(InvoiceDto invoiceDto);
-        Task<DetailedInvoiceDto> EditInvoiceAsync(InvoiceDto invoiceDto, long invoiceId);
-        Task DeleteInvoiceAsync(long id);
-        Task<DetailedInvoiceDto> GetInvoiceAsync(long id);
-        Task<IEnumerable<InvoiceListDto>> GetInvoiceListAsync();
+        Task<DetailedInvoiceDto> AddNewInvoiceAsync(InvoiceDto invoiceDto, CancellationToken cancellationToken = default);
+        Task<DetailedInvoiceDto> EditInvoiceAsync(InvoiceDto invoiceDto, long invoiceId, CancellationToken cancellationToken = default);
+        Task DeleteInvoiceAsync(long id, CancellationToken cancellationToken = default);
+        Task<DetailedInvoiceDto> GetInvoiceAsync(long id, CancellationToken cancellationToken = default);
+        Task<IEnumerable<InvoiceListDto>> GetInvoiceListAsync(CancellationToken cancellationToken = default);
     }
 }

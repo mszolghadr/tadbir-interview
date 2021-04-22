@@ -23,18 +23,40 @@ namespace tadbir.API.Controllers
             _productService = productService;
         }
 
+        [HttpPost]
+        [ProducesResponseType(typeof(ProductDto), (int)HttpStatusCode.OK)]
+        public async Task<IActionResult> AddNewProduct(ProductDto dto, CancellationToken cancellationToken)
+        {
+            return Ok(await _productService.AddNewProductAsync(dto, cancellationToken));
+        }
+
         [HttpGet]
         [ProducesResponseType(typeof(IEnumerable<ProductDto>), (int)HttpStatusCode.OK)]
-        public async Task<ActionResult<IEnumerable<ProductDto>>> Get(CancellationToken cancellationToken)
+        public async Task<IActionResult> Get(CancellationToken cancellationToken)
         {
             return Ok(await _productService.GetProductListAsync(cancellationToken));
         }
 
-        [HttpPost]
+        [HttpGet("{id}")]
         [ProducesResponseType(typeof(ProductDto), (int)HttpStatusCode.OK)]
-        public async Task<ActionResult<ProductDto>> AddNewProduct(ProductDto dto, CancellationToken cancellationToken)
+        public async Task<IActionResult> GetProduct(long id, CancellationToken cancellationToken)
         {
-            return Ok(await _productService.AddNewProductAsync(dto, cancellationToken));
+            return Ok(await _productService.GetProductAsync(id, cancellationToken));
+        }
+
+        [HttpPut("{id}")]
+        [ProducesResponseType(typeof(ProductDto), (int)HttpStatusCode.OK)]
+        public async Task<IActionResult> EditProduct(long id, ProductDto dto, CancellationToken cancellationToken)
+        {
+            return Ok(await _productService.EditProductAsync(dto, id, cancellationToken));
+        }
+
+        [HttpDelete("{id}")]
+        [ProducesResponseType(typeof(void), (int)HttpStatusCode.NoContent)]
+        public async Task<IActionResult> DeleteProduct(long id, CancellationToken cancellationToken)
+        {
+            await _productService.DeleteProductAsync(id, cancellationToken);
+            return NoContent();
         }
     }
 }

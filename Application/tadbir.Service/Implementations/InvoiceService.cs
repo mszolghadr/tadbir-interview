@@ -6,6 +6,7 @@ using tadbir.Repository.Interfaces;
 using tadbir.Service.DTOs.InvoiceDTOs;
 using tadbir.Service.Interfaces;
 using System.Linq;
+using System.Threading;
 
 namespace tadbir.Service.Implementations
 {
@@ -18,7 +19,7 @@ namespace tadbir.Service.Implementations
             _invoiceRepository = _unitOfWork.InvoiceRepository;
         }
 
-        public async Task<DetailedInvoiceDto> AddNewInvoiceAsync(InvoiceDto invoiceDto)
+        public async Task<DetailedInvoiceDto> AddNewInvoiceAsync(InvoiceDto invoiceDto, CancellationToken cancellationToken)
         {
             var entity = _mapper.Map<Invoice>(invoiceDto);
             _invoiceRepository.Add(entity);
@@ -37,13 +38,13 @@ namespace tadbir.Service.Implementations
             return _mapper.Map<DetailedInvoiceDto>(entity);
         }
 
-        public async Task DeleteInvoiceAsync(long id)
+        public async Task DeleteInvoiceAsync(long id, CancellationToken cancellationToken)
         {
             await _invoiceRepository.DeleteAsync(id);
             await _unitOfWork.CommitAsync();
         }
 
-        public async Task<DetailedInvoiceDto> EditInvoiceAsync(InvoiceDto invoiceDto, long invoiceId)
+        public async Task<DetailedInvoiceDto> EditInvoiceAsync(InvoiceDto invoiceDto, long invoiceId, CancellationToken cancellationToken)
         {
             var entity = await _invoiceRepository.GetWithRowsAsync(invoiceId);
             _mapper.Map(invoiceDto, entity);
@@ -53,13 +54,13 @@ namespace tadbir.Service.Implementations
             return _mapper.Map<DetailedInvoiceDto>(entity);
         }
 
-        public async Task<DetailedInvoiceDto> GetInvoiceAsync(long id)
+        public async Task<DetailedInvoiceDto> GetInvoiceAsync(long id, CancellationToken cancellationToken)
         {
             var entity = await _invoiceRepository.GetWithRowsAsync(id);
             return _mapper.Map<DetailedInvoiceDto>(entity);
         }
 
-        public async Task<IEnumerable<InvoiceListDto>> GetInvoiceListAsync()
+        public async Task<IEnumerable<InvoiceListDto>> GetInvoiceListAsync(CancellationToken cancellationToken)
         {
             var entities = await _invoiceRepository.GetAllAsync();
             return _mapper.Map<IEnumerable<InvoiceListDto>>(entities);
