@@ -1,19 +1,15 @@
 using System;
 using System.IO;
-using AutoMapper;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.SpaServices.AngularCli;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
-using Serilog;
 using tadbir.Data;
 using tadbir.Service;
-using tadbir.Service.DTOs;
 
 namespace tadbir.API
 {
@@ -93,6 +89,7 @@ namespace tadbir.API
                 if (env.IsDevelopment())
                 {
                     // spa.UseAngularCliServer(npmScript: "start");
+                    spa.Options.StartupTimeout = TimeSpan.FromMinutes(5);
                     spa.UseProxyToSpaDevelopmentServer("http://localhost:4200");
                 }
             });
