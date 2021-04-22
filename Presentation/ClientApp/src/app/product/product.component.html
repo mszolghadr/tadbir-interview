@@ -21,7 +21,7 @@
     <th class="border-left"></th>
   </thead>
   <tbody>
-    <tr *ngFor="let item of products">
+    <tr *ngFor="let item of products | slice: (page-1) * pageSize : page * pageSize">
       <td class="border-right">{{item.title}}</td>
       <td>{{item.unitPrice}}</td>
       <td class="border-left">
@@ -33,3 +33,6 @@
     </tr>
   </tbody>
 </table>
+<ngb-pagination class="d-flex justify-content-center" [(page)]="page" [pageSize]="pageSize"
+  [collectionSize]="products.length"></ngb-pagination>
+<app-toasts aria-live="polite" aria-atomic="true"></app-toasts>

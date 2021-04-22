@@ -1,8 +1,11 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { NgbToast } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Product } from '../models/product.model';
+import { ToastMessage } from '../models/toast.model';
 import { ProductService } from '../services/product.service';
+import { ToastService } from '../services/toast.service';
+import { ConfirmModalComponent } from '../shared/confirm-modal.component';
 
 @Component({
   selector: 'app-product-component',
@@ -10,12 +13,20 @@ import { ProductService } from '../services/product.service';
   styles: ['td:last-child{width: 6rem}']
 })
 export class ProductComponent {
-  public products: Product[];
-  public form: FormGroup;
+  products: Product[];
+  form: FormGroup;
+  toasts: ToastMessage[] = [];
+  page = 1;
+  pageSize = 10;
   /**
    *
    */
-  constructor(private productService: ProductService, private fb: FormBuilder, private toastService: NgbToast) {
+  constructor(
+    private productService: ProductService,
+    private fb: FormBuilder,
+    private toastService: ToastService,
+    private modalService: NgbModal
+  ) {
     productService.getInvoices().subscribe(result => this.products = result);
 
     this.form = fb.group({
@@ -25,7 +36,7 @@ export class ProductComponent {
     });
   }
 
-  public save() {
+  save() {
     const id = this.form.value?.id;
     if (id) {
       this.productService.updateInvoice(this.form.value, id).subscribe(result => {
@@ -44,19 +55,23 @@ export class ProductComponent {
     }
   }
 
-  public edit(item: Product) {
+  edit(item: Product) {
     this.form.patchValue(item);
   }
 
   del(id) {
-    if (confirm('از حذف این کالا مطمئن هستید؟')) {
-      this.productService.deleteInvoice(id).subscribe({
-        next: () => {
-          this.products = this.products.filter(p => p.id !== id);
-        }
-        , error: error => this.showError(error)
-      });
-    }
+    const modalRef = this.modalService.open(ConfirmModalComponent);
+    modalRef.componentInstance.message = 'از حذف این کالا مطمئن هستید؟';
+    modalRef.result.then((result) => {
+      if (result === 'YES') {
+        this.productService.deleteInvoice(id).subscribe({
+          next: () => {
+            this.products = this.products.filter(p => p.id !== id);
+          }
+          , error: error => this.showError(error)
+        });
+      }
+    }, () => { });
   }
 
   resetForm(): void {
@@ -64,7 +79,10 @@ export class ProductComponent {
   }
 
   showError(error: any) {
-    this.toastService.header = 'hi';
-    this.toastService.show();
+    this.toastService.showDanger(error.error.title);
+  }
+
+  close() {
+    this.toasts = [];
   }
 }
