@@ -1,10 +1,10 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'app-counter-component',
-  templateUrl: './counter.component.html'
+  selector: 'app-product-component',
+  templateUrl: './product.component.html'
 })
-export class CounterComponent {
+export class ProductComponent {
   public currentCount = 0;
 
   public incrementCounter() {
