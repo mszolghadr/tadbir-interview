@@ -1,12 +1,13 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { NgbToast } from '@ng-bootstrap/ng-bootstrap';
 import { Product } from '../models/product.model';
 import { ProductService } from '../services/product.service';
 
 @Component({
   selector: 'app-product-component',
   templateUrl: './product.component.html',
-  styles: ["td:last-child{width: 6rem}"]
+  styles: ['td:last-child{width: 6rem}']
 })
 export class ProductComponent {
   public products: Product[];
@@ -14,21 +15,21 @@ export class ProductComponent {
   /**
    *
    */
-  constructor(private productService: ProductService, private fb: FormBuilder) {
+  constructor(private productService: ProductService, private fb: FormBuilder, private toastService: NgbToast) {
     productService.getInvoices().subscribe(result => this.products = result);
 
     this.form = fb.group({
       id: [0],
       title: [, [Validators.required]],
       unitPrice: [, [Validators.required, Validators.min(1)]]
-    })
+    });
   }
 
   public save() {
     const id = this.form.value?.id;
     if (id) {
       this.productService.updateInvoice(this.form.value, id).subscribe(result => {
-        const index = this.products.findIndex(p => p.id == id);
+        const index = this.products.findIndex(p => p.id === id);
         this.products[index] = result;
         this.resetForm();
       }, error => this.showError(error));
@@ -48,16 +49,22 @@ export class ProductComponent {
   }
 
   del(id) {
-    if (confirm("از حذف این کالا مطمئن هستید؟"))
-      this.productService.deleteInvoice(id).subscribe(() => {
-        this.products = this.products.filter(p => p.id != id);
-      }
-        , error => this.showError(error));
+    if (confirm('از حذف این کالا مطمئن هستید؟')) {
+      this.productService.deleteInvoice(id).subscribe({
+        next: () => {
+          this.products = this.products.filter(p => p.id !== id);
+        }
+        , error: error => this.showError(error)
+      });
+    }
   }
 
   resetForm(): void {
     this.form.reset({ id: 0 });
   }
 
-  showError(error: any) { }
+  showError(error: any) {
+    this.toastService.header = 'hi';
+    this.toastService.show();
+  }
 }
