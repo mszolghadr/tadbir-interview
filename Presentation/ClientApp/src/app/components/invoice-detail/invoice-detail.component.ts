@@ -44,7 +44,7 @@ export class InvoiceDetailComponent implements OnInit {
     const g = this.fb.group({
       productId: [, [Validators.required]],
       quantity: [1, [Validators.required, Validators.min(1)]],
-      discountPercentage: [, [Validators.required]],
+      discountPercentage: [0, [Validators.required]],
       productUnitPrice: [{ value: 0, disabled: true }]
     });
 

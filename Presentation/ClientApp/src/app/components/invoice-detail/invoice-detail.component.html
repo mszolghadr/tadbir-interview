@@ -55,10 +55,10 @@
                 <option *ngFor="let prod of productList" [value]="prod.key">{{prod.value}}</option>
               </select>
             </td>
-            <td><input class="form-control" [formControl]="item.getControl('quantity')"></td>
-            <td colspan="2"><input class="form-control d-inline-block"
+            <td><input type="number" class="form-control" [formControl]="item.getControl('quantity')"></td>
+            <td colspan="2"><input type="number" class="form-control d-inline-block"
                 [formControl]="item.getControl('productUnitPrice')"></td>
-            <td><input class="form-control" [formControl]="item.getControl('discountPercentage')"></td>
+            <td><input type="number" class="form-control" [formControl]="item.getControl('discountPercentage')"></td>
             <ng-container *ngIf="getDetail(item) as detail">
               <td colspan="2">{{detail.discountedUnitPrice}}</td>
               <td colspan="2">{{detail.totalPrice}}</td>
