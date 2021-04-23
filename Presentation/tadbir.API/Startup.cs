@@ -82,6 +82,15 @@ namespace tadbir.API
                     // spa.UseProxyToSpaDevelopmentServer("http://localhost:4200");
                 }
             });
+
+
+            using (var serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
+            {
+                using (var context = serviceScope.ServiceProvider.GetService<TadbirDbContext>())
+                {
+                    context.Database.Migrate();
+                }
+            }
         }
     }
 }
