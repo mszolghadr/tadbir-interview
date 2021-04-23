@@ -1,33 +1,85 @@
-<form [formGroup]="invoiceForm">
-  <table>
-    <thead>
-      <th>ردیف</th>
-      <th>عنوان</th>
-      <th>تعداد</th>
-      <th>قیمت واحد (بدون تخفیف)</th>
-      <th>درصد تخفیف</th>
-      <th>قیمت واحد (با تخفیف)</th>
-      <th>سرجمع (بدون تخفیف)</th>
-      <th>سرجمع (با تخفیف)</th>
-      <th>سود مشتری از تخفیف واحد</th>
-      <th>سود مشتری از کل تخفیف</th>
-    </thead>
-    <tbody formArrayName="rows">
-      <tr *ngFor="let item of invoiceItems.controls; let i = index" formGroupName="{{ i }}">
-        <td>{{i + 1}}</td>
-        <td><input [formControl]="item.getControl('productId')"></td>
-        <td><input [formControl]="item.getControl('quantity')"></td>
-        <td><input [formControl]="item.getControl('productUnitPrice')"></td>
-        <td><input [formControl]="item.getControl('discountPercentage')"></td>
-        <ng-container *ngIf="getDetail(item) as detail">
-          <td>{{detail.discountedUnitPrice}}</td>
-          <td>{{detail.totalPrice}}</td>
-          <td>{{detail.totalDiscountedPrice}}</td>
-          <td>{{detail.unitDiscountAmount}}</td>
-          <td>{{detail.totalDiscountAmount}}</td>
+<form [formGroup]="invoiceForm" (ngSubmit)="submit()">
+  <fieldset class="border" [disabled]="isReadOnly">
+    <div class="col-12 d-flex justify-content-between">
+      <div class="mt-1 form-row form-group col-6 col-sm-3">
+        <label class="col-form-label col-form-label-sm" for="userFullName">نام خریدار:</label>
+        <input class="form-control form-control-sm" [ngClass]="isReadOnly? '' : 'border'" type="text" id="userFullName"
+          formControlName="userFullName">
+      </div>
+      <div class="d-flex flex-column col-6 col-sm-3">
+        <div class="form-group form-row">
+          <label class="col-form-label col-form-label-sm" for="date">تاریخ:</label>
+          <span id="date"></span>
+        </div>
+        <div class="form-group form-row">
+          <label class="col-form-label col-form-label-sm" for="serial">شماره:</label>
+          <input class="form-control form-control-sm" id="serial" type="text" formControlName="id">
+        </div>
+      </div>
+    </div>
+    <table>
+      <thead>
+        <th>ردیف</th>
+        <th colspan="4">عنوان</th>
+        <th>تعداد</th>
+        <th colspan="2">قیمت واحد<br>(بدون تخفیف)</th>
+        <th>درصد تخفیف</th>
+        <th colspan="2">قیمت واحد<br>(با تخفیف)</th>
+        <th colspan="2">سرجمع<br>(بدون تخفیف)</th>
+        <th colspan="2">سرجمع<br>(با تخفیف)</th>
+        <th colspan="2">سود مشتری از تخفیف واحد</th>
+        <th colspan="2">سود مشتری از کل تخفیف</th>
+      </thead>
+      <tbody class="text-dark table-bordered">
+        <ng-container formArrayName="rows">
+          <tr *ngFor="let item of invoiceItems.controls; let i = index" formGroupName="{{ i }}">
+            <td>{{i + 1}}</td>
+            <td colspan="4" class="min-5">
+              <select class="form-control" id="exampleFormControlSelect1" [formControl]="item.getControl('productId')"
+                (change)="changeProduct($event, i)">
+                <option *ngFor="let prod of productList" [value]="prod.key">{{prod.value}}</option>
+              </select>
+            </td>
+            <td><input class="form-control" [formControl]="item.getControl('quantity')"></td>
+            <td colspan="2"><input class="form-control d-inline-block"
+                [formControl]="item.getControl('productUnitPrice')"></td>
+            <td><input class="form-control" [formControl]="item.getControl('discountPercentage')"></td>
+            <ng-container *ngIf="getDetail(item) as detail">
+              <td colspan="2">{{detail.discountedUnitPrice}}</td>
+              <td colspan="2">{{detail.totalPrice}}</td>
+              <td colspan="2">{{detail.totalDiscountedPrice}}</td>
+              <td colspan="2">{{detail.unitDiscountAmount}}</td>
+              <td colspan="2">{{detail.totalDiscountAmount}}</td>
+            </ng-container>
+          </tr>
         </ng-container>
-      </tr>
-    </tbody>
-  </table>
-  <p>{{invoiceForm.getRawValue() | json}}</p>
+        <tr>
+          <td colspan="1">
+            <i class="bi-plus-square icon" (click)="add()" *ngIf="mode !== 'VIEW'"></i>
+          </td>
+          <td colspan="18"></td>
+        </tr>
+        <tr>
+          <td colspan="15" rowspan="3">
+            <textarea class="col-12" name="description" id="desc" cols="30" rows="3" formControlName="description"
+              placeholder="توضیحات:"></textarea>
+          </td>
+          <td colspan="2">جمع کل</td>
+          <td colspan="2">{{totalPrice}}</td>
+        </tr>
+        <tr>
+          <td colspan="2">جمع تخفیف</td>
+          <td colspan="2">{{totalDiscountAmount}}</td>
+        </tr>
+        <tr>
+          <td colspan="2">قابل پرداخت</td>
+          <td colspan="2">{{totalDiscountedPrice}}</td>
+        </tr>
+      </tbody>
+    </table>
+  </fieldset>
+  <div class="d-flex justify-content-end" *ngIf="!isReadOnly">
+    <input type="submit" value="ذخیره" class="btn btn-primary mt-3" [disabled]="invoiceForm.invalid">
+  </div>
 </form>
+<p>{{invoiceForm.value | json}}</p>

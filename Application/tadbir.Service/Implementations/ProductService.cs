@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 using tadbir.Entities;
 using tadbir.Repository.Interfaces;
 using tadbir.Service.DTOs.ProductDTOs;
@@ -41,6 +43,11 @@ namespace tadbir.Service.Implementations
             await _productRepository.UpdateAsync(entity, productId);
             await _unitOfWork.CommitAsync();
             return _mapper.Map<ProductDto>(entity);
+        }
+
+        public async Task<IEnumerable<KeyValuePair<long, string>>> GetDropDownListAsync(CancellationToken cancellationToken = default)
+        {
+            return await _productRepository.GetAll().Select(p => new KeyValuePair<long, string>(p.Id, p.Title)).ToListAsync(cancellationToken);
         }
 
         public async Task<ProductDto> GetProductAsync(long id, CancellationToken cancellationToken)

@@ -79,5 +79,12 @@ namespace tadbir.API.Controllers
                 return BadRequest("عملیات غیر مجاز");
             }
         }
+
+        [HttpGet("droplist")]
+        [ProducesResponseType(typeof(IEnumerable<KeyValuePair<long, string>>), (int)HttpStatusCode.OK)]
+        public async Task<IActionResult> GetDropDownList(CancellationToken cancellationToken)
+        {
+            return Ok(await _productService.GetDropDownListAsync(cancellationToken));
+        }
     }
 }

@@ -7,6 +7,7 @@ export class Invoice {
 }
 
 export class InvoiceItem {
+    constructor() { }
     productId: string;
     quantity: number;
     discountPercentage: number;

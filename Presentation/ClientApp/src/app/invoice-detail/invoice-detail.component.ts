@@ -1,9 +1,13 @@
+import { KeyValue } from '@angular/common';
 import { Component, Input, OnInit } from '@angular/core';
-import { AbstractControl, FormArray, FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { AbstractControl, FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { resourceUsage } from 'process';
 import { InvoiceItem } from '../models/invoice-detail.model';
 import { InvoiceDetailedItem } from '../models/invoice-detailed-item.model';
 import { InvoiceList } from '../models/invoice-list.model';
 import { InvoiceService } from '../services/invoice.service';
+import { ProductService } from '../services/product.service';
 
 @Component({
   selector: 'app-invoice-detail',
@@ -13,25 +17,33 @@ import { InvoiceService } from '../services/invoice.service';
 export class InvoiceDetailComponent implements OnInit {
 
   @Input() model: InvoiceList;
+  @Input() mode = 'NEW';
   invoiceForm: FormGroup = new FormGroup({});
+  productList: KeyValue<number, string>[] = [];
 
-  constructor(private fb: FormBuilder, private invoiceService: InvoiceService) {
+  constructor(
+    private fb: FormBuilder,
+    private invoiceService: InvoiceService,
+    private productService: ProductService,
+    public activeModal: NgbActiveModal
+  ) {
     this.invoiceForm = fb.group({
-      id: [],
-      userFullName: [],
-      createdOnUtc: [],
+      id: [{ value: null, disabled: true }],
+      userFullName: [, [Validators.required]],
+      createdOnUtc: [{ value: null, disabled: true }],
       description: [],
       rows: fb.array([this.newRow()])
     });
+    productService.productDropDown().subscribe(result => this.productList = result);
   }
 
   get invoiceItems(): FormArray { return this.invoiceForm.controls.rows as FormArray; }
 
   newRow(data?) {
     const g = this.fb.group({
-      productId: [],
-      quantity: [],
-      discountPercentage: [],
+      productId: [, [Validators.required]],
+      quantity: [1, [Validators.required, Validators.min(1)]],
+      discountPercentage: [, [Validators.required]],
       productUnitPrice: [{ value: 0, disabled: true }]
     });
 
@@ -44,16 +56,22 @@ export class InvoiceDetailComponent implements OnInit {
 
   ngOnInit(): void {
     this.invoiceForm.patchValue(this.model);
-    this.invoiceService.getInvoiceById(this.model.id).subscribe(result => {
-      this.invoiceForm.patchValue(result);
+    if (this.mode !== 'NEW') {
+      this.invoiceService.getInvoiceById(this.model.id).subscribe(result => {
+        this.invoiceForm.patchValue(result);
 
-      this.invoiceItems.clear();
-      if (result.rows && result.rows.length) {
-        result.rows.forEach(r => {
-          this.invoiceItems.push(this.newRow(r));
-        });
-      }
-    });
+        this.invoiceItems.clear();
+        if (result.rows && result.rows.length) {
+          result.rows.forEach(r => {
+            this.invoiceItems.push(this.newRow(r));
+          });
+        }
+      });
+    }
+
+    if (this.mode === 'VIEW') {
+      this.invoiceForm.disable();
+    }
   }
 
   getDetail(control: AbstractControl) {
@@ -61,6 +79,43 @@ export class InvoiceDetailComponent implements OnInit {
       control.getValue('quantity'),
       control.getValue('discountPercentage'),
       control.getValue('productUnitPrice'));
+  }
+
+  add(): void {
+    this.invoiceItems.push(this.newRow());
+  }
+
+  submit(): void {
+    const id = this.invoiceForm.getValue('id');
+    if (id) {
+      this.invoiceService.updateInvoice(this.invoiceForm.value, id).subscribe(result => this.activeModal.close(result));
+    } else {
+      this.invoiceService.addInvoice(this.invoiceForm.value).subscribe(result => this.activeModal.close(result));
+    }
+  }
+
+  get totalPrice() {
+    return this.invoiceItems.controls.map(c => this.getDetail(c)).reduce((pre, curr) => pre + curr.totalPrice, 0);
+  }
+
+  get totalDiscountAmount() {
+    return this.invoiceItems.controls.map(c => this.getDetail(c)).reduce((pre, curr) => pre + curr.totalDiscountAmount, 0);
+  }
+
+  get totalDiscountedPrice() {
+    return this.invoiceItems.controls.map(c => this.getDetail(c)).reduce((pre, curr) => pre + curr.totalDiscountedPrice, 0);
+  }
+
+  get isReadOnly(): boolean { return this.mode === 'VIEW'; }
+
+  changeProduct(event, index: number): void {
+    const prodId = event.target.value;
+    const oldProd: InvoiceItem = this.invoiceItems.getRawValue()[index];
+    this.productService.getProductById(prodId).subscribe(result => {
+      oldProd.productId = prodId;
+      oldProd.productUnitPrice = result.unitPrice;
+      this.invoiceItems.controls[index].patchValue(oldProd);
+    });
   }
 }
 

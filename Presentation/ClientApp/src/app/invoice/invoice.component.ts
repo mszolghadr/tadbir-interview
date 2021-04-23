@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { NgbModal, NgbModalConfig } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModal, NgbModalOptions } from '@ng-bootstrap/ng-bootstrap';
 import { InvoiceDetailComponent } from '../invoice-detail/invoice-detail.component';
 import { InvoiceList } from '../models/invoice-list.model';
 import { InvoiceService } from '../services/invoice.service';
@@ -18,16 +18,40 @@ export class FetchDataComponent {
   constructor(
     private invoiceService: InvoiceService,
     private toastService: ToastService,
-    config: NgbModalConfig,
     private modalService: NgbModal
   ) {
     invoiceService.getInvoices().subscribe(result => this.invoices = result);
-    config.size = 'xl';
   }
 
   edit(invoice: InvoiceList) {
-    const modalRef = this.modalService.open(InvoiceDetailComponent);
+    const options: NgbModalOptions = {
+      size: 'xl'
+    };
+    const modalRef = this.modalService.open(InvoiceDetailComponent, options);
     modalRef.componentInstance.model = invoice;
+    modalRef.componentInstance.mode = 'EDIT';
+    modalRef.closed.subscribe(m => {
+      const index = this.invoices.findIndex(i => i.id === invoice.id);
+      this.invoices[index] = m;
+    });
+  }
+
+  view(invoice: InvoiceList) {
+    const options: NgbModalOptions = {
+      size: 'xl'
+    };
+    const modalRef = this.modalService.open(InvoiceDetailComponent, options);
+    modalRef.componentInstance.model = invoice;
+    modalRef.componentInstance.mode = 'VIEW';
+  }
+
+  add() {
+    const options: NgbModalOptions = {
+      size: 'xl'
+    };
+    const modalRef = this.modalService.open(InvoiceDetailComponent, options);
+    modalRef.componentInstance.mode = 'NEW';
+    modalRef.closed.subscribe(m => this.invoices.push(m));
   }
 
   del(id: number) {

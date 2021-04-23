@@ -1,9 +1,13 @@
-<table class='table table-striped' aria-labelledby="tableLabel" *ngIf="invoices && invoices.length">
+<table class='table border table-striped' aria-labelledby="tableLabel" *ngIf="invoices && invoices.length">
   <thead>
     <th class="border-right">شماره</th>
     <th colspan="2">نام کابر</th>
     <th>تاریخ</th>
-    <th class="border-left"></th>
+    <th class="border-left">
+      <p class="d-flex justify-content-center mb-0">
+        <i class="bi-plus-square-fill icon text-primary" (click)="add()"></i>
+      </p>
+    </th>
   </thead>
   <tbody>
     <tr *ngFor="let item of invoices | slice: (page-1) * pageSize : page * pageSize">
@@ -12,6 +16,7 @@
       <td>{{item.createdOnUtc | persianDate: 'dateOnly'}}</td>
       <td class="border-left">
         <div class="row justify-content-center">
+          <i class="bi-binoculars icon ml-3" (click)="view(item)"></i>
           <i class="bi-pencil-square icon ml-3" (click)="edit(item)"></i>
           <i class="bi-trash icon" (click)="del(item.id)"></i>
         </div>

@@ -12,5 +12,6 @@ namespace tadbir.Service.Interfaces
         Task DeleteProductAsync(long id, CancellationToken cancellationToken = default);
         Task<ProductDto> GetProductAsync(long id, CancellationToken cancellationToken = default);
         Task<IEnumerable<ProductListDto>> GetProductListAsync(CancellationToken cancellationToken = default);
+        Task<IEnumerable<KeyValuePair<long, string>>> GetDropDownListAsync(CancellationToken cancellationToken = default);
     }
 }
