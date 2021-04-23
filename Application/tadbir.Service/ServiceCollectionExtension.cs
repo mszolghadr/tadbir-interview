@@ -22,7 +22,6 @@ namespace tadbir.Service
                 mc.AllowNullCollections = false;
                 mc.AddProfile(new MapperProfile());
             });
-            // IMapper mapper = mappingConfig.CreateMapper();
             services.AddSingleton<IMapper>(sp => mappingConfig.CreateMapper());
 
             return services;

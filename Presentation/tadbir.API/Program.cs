@@ -16,7 +16,6 @@ namespace tadbir.API
             {
                 Log.Logger = new LoggerConfiguration()
                     .Enrich.FromLogContext()
-                    // .MinimumLevel.Debug()
                     .WriteTo.Console(LogEventLevel.Information)
                     .CreateLogger();
 

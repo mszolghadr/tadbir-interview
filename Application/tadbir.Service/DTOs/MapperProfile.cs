@@ -10,24 +10,23 @@ namespace tadbir.Service.DTOs
     {
         public MapperProfile()
         {
-            // #region  Products
+            #region  Products
             CreateMap<Product, ProductDto>()
                 .ReverseMap()
                 .ForMember(p => p.Id, options => options.Ignore());
 
             CreateMap<Product, ProductListDto>();
-            // #endregion
+            #endregion
 
             #region  Invoice
             CreateMap<InvoiceDto, Invoice>()
                 .ForMember(i => i.Id, options => options.Ignore());
-            // .ForMember(i => i.Rows, options => options.Ignore());
 
             CreateMap<Invoice, DetailedInvoiceDto>();
 
             CreateMap<InvoiceRowDto, InvoiceRow>();
 
-            CreateMap<InvoiceRow, DetailedInvoiceRowDto>();//.ForMember(d => d.ProductTitle, options => options.MapFrom(r => r.Product.Title))
+            CreateMap<InvoiceRow, DetailedInvoiceRowDto>();
 
             CreateMap<Invoice, InvoiceListDto>();
             #endregion
