@@ -19,7 +19,7 @@ namespace tadbir.Service.Implementations
             _invoiceRepository = _unitOfWork.InvoiceRepository;
         }
 
-        public async Task<DetailedInvoiceDto> AddNewInvoiceAsync(InvoiceDto invoiceDto, CancellationToken cancellationToken)
+        public async Task<InvoiceListDto> AddNewInvoiceAsync(InvoiceDto invoiceDto, CancellationToken cancellationToken)
         {
             var entity = _mapper.Map<Invoice>(invoiceDto);
             _invoiceRepository.Add(entity);
@@ -31,7 +31,7 @@ namespace tadbir.Service.Implementations
             }
             await _unitOfWork.CommitAsync();
             entity = await _invoiceRepository.GetWithRowsAsync(entity.Id);
-            return _mapper.Map<DetailedInvoiceDto>(entity);
+            return _mapper.Map<InvoiceListDto>(entity);
         }
 
         public async Task DeleteInvoiceAsync(long id, CancellationToken cancellationToken)
@@ -40,7 +40,7 @@ namespace tadbir.Service.Implementations
             await _unitOfWork.CommitAsync();
         }
 
-        public async Task<DetailedInvoiceDto> EditInvoiceAsync(InvoiceDto invoiceDto, long invoiceId, CancellationToken cancellationToken)
+        public async Task<InvoiceListDto> EditInvoiceAsync(InvoiceDto invoiceDto, long invoiceId, CancellationToken cancellationToken)
         {
             var entity = await _invoiceRepository.GetWithRowsAsync(invoiceId);
             if (entity == null)
@@ -49,7 +49,7 @@ namespace tadbir.Service.Implementations
 
             await _invoiceRepository.UpdateAsync(entity, invoiceId);
             await _unitOfWork.CommitAsync();
-            return _mapper.Map<DetailedInvoiceDto>(entity);
+            return _mapper.Map<InvoiceListDto>(entity);
         }
 
         public async Task<DetailedInvoiceDto> GetInvoiceAsync(long id, CancellationToken cancellationToken)
