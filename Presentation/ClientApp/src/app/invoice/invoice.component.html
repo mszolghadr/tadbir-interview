@@ -1,23 +1,25 @@
-<table class='table border table-striped' aria-labelledby="tableLabel" *ngIf="invoices && invoices.length">
+<table class='table border table-striped' aria-labelledby="tableLabel">
   <thead>
-    <th class="border-right">شماره</th>
+    <th>ردیف</th>
+    <th>شماره</th>
     <th colspan="2">نام کابر</th>
     <th>تاریخ</th>
-    <th class="border-left">
+    <th>
       <p class="d-flex justify-content-center mb-0">
         <i class="bi-plus-square-fill icon text-primary" (click)="add()"></i>
       </p>
     </th>
   </thead>
   <tbody>
-    <tr *ngFor="let item of invoices | slice: (page-1) * pageSize : page * pageSize">
-      <td class="border-right">{{item.id}}</td>
+    <tr *ngFor="let item of invoices | slice: (page-1) * pageSize : page * pageSize; let i = index">
+      <td> {{i + 1}}</td>
+      <td>{{item.id}}</td>
       <td colspan="2">{{item.userFullName}}</td>
       <td>{{item.createdOnUtc | persianDate: 'dateOnly'}}</td>
-      <td class="border-left">
-        <div class="row justify-content-center">
-          <i class="bi-binoculars icon ml-3" (click)="view(item)"></i>
-          <i class="bi-pencil-square icon ml-3" (click)="edit(item)"></i>
+      <td>
+        <div class="row container-sm justify-content-center">
+          <i class="bi-binoculars icon" (click)="view(item)"></i>
+          <i class="bi-pencil-square icon" (click)="edit(item)"></i>
           <i class="bi-trash icon" (click)="del(item.id)"></i>
         </div>
       </td>

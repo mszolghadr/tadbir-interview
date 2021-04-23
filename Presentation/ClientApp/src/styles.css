@@ -27,4 +27,5 @@ code {
 i.icon {
   cursor: pointer;
   font-size: x-large;
+  margin: 0 .5rem;
 }
