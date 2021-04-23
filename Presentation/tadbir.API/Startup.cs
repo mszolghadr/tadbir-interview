@@ -15,15 +15,9 @@ namespace tadbir.API
 {
     public class Startup
     {
-        // private MapperConfiguration _mapperConfiguration { get; set; }
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
-
-            // _mapperConfiguration = new MapperConfiguration(cfg =>
-            // {
-            //     cfg.AddProfile(new MapperProfile());
-            // });
         }
 
         public IConfiguration Configuration { get; } = new ConfigurationBuilder()
@@ -32,12 +26,10 @@ namespace tadbir.API
             .AddJsonFile($"appsettings.{Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? "Production"}.json", optional: true)
             .Build();
 
-        // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<TadbirDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("interview")));
             services.AddInternalServices();
-            // services.AddSingleton<IMapper>(sp => _mapperConfiguration.CreateMapper());
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
@@ -52,7 +44,6 @@ namespace tadbir.API
             });
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerFactory loggerFactory)
         {
             if (env.IsDevelopment())
@@ -81,9 +72,6 @@ namespace tadbir.API
 
             app.UseSpa(spa =>
             {
-                // To learn more about options for serving an Angular SPA from ASP.NET Core,
-                // see https://go.microsoft.com/fwlink/?linkid=864501
-
                 // spa.Options.SourcePath = "../ClientApp";
 
                 if (env.IsDevelopment())

@@ -24,7 +24,7 @@ namespace tadbir.API.Controllers
         }
 
         [HttpPost]
-        [ProducesResponseType(typeof(DetailedInvoiceDto), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(InvoiceListDto), (int)HttpStatusCode.OK)]
         public async Task<IActionResult> AddNewInvoice(InvoiceDto dto, CancellationToken cancellationToken)
         {
             return Ok(await _invoiceService.AddNewInvoiceAsync(dto, cancellationToken));
@@ -50,7 +50,7 @@ namespace tadbir.API.Controllers
         }
 
         [HttpPut("{id}")]
-        [ProducesResponseType(typeof(DetailedInvoiceDto), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(InvoiceListDto), (int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
         public async Task<IActionResult> EditProduct(long id, InvoiceDto dto, CancellationToken cancellationToken)
         {
