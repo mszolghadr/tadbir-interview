@@ -20,8 +20,8 @@ namespace tadbir.Service.DTOs
 
             #region  Invoice
             CreateMap<InvoiceDto, Invoice>()
-                .ForMember(i => i.Id, options => options.Ignore())
-                .ForMember(i => i.Rows, options => options.Ignore());
+                .ForMember(i => i.Id, options => options.Ignore());
+            // .ForMember(i => i.Rows, options => options.Ignore());
 
             CreateMap<Invoice, DetailedInvoiceDto>();
 
