@@ -3,6 +3,7 @@ using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using tadbir.Service.DTOs.ProductDTOs;
 using tadbir.Service.Interfaces;
@@ -65,10 +66,18 @@ namespace tadbir.API.Controllers
 
         [HttpDelete("{id}")]
         [ProducesResponseType(typeof(void), (int)HttpStatusCode.NoContent)]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         public async Task<IActionResult> DeleteProduct(long id, CancellationToken cancellationToken)
         {
-            await _productService.DeleteProductAsync(id, cancellationToken);
-            return NoContent();
+            try
+            {
+                await _productService.DeleteProductAsync(id, cancellationToken);
+                return NoContent();
+            }
+            catch (DbUpdateException)
+            {
+                return BadRequest("عملیات غیر مجاز");
+            }
         }
     }
 }

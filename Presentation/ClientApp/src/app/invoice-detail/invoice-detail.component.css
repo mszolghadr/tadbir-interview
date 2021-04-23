@@ -1,0 +1,22 @@
+form {
+  margin: 2rem;
+  text-align: center;
+  max-width: 100%;
+  overflow-x: auto;
+}
+
+td {
+  border: 1px solid darkgrey;
+  padding: .2rem 0.5rem;
+}
+
+input {
+  border: none;
+  max-width: 4rem;
+  text-align: center;
+}
+
+input:disabled {
+  background: none;
+  color: black;
+}

@@ -12,6 +12,7 @@ import { FetchDataComponent as InvoiceComponent } from './invoice/invoice.compon
 import { NgbModalModule, NgbModule, NgbToastModule } from '@ng-bootstrap/ng-bootstrap';
 import { ToastsContainerComponent } from './shared/toast-container.component';
 import { PersianDatePipe } from './shared/persian-date.pipe';
+import { InvoiceDetailComponent } from './invoice-detail/invoice-detail.component';
 
 @NgModule({
   declarations: [
@@ -22,6 +23,7 @@ import { PersianDatePipe } from './shared/persian-date.pipe';
     InvoiceComponent,
     ToastsContainerComponent,
     PersianDatePipe,
+    InvoiceDetailComponent,
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),

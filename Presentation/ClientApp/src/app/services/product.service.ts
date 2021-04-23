@@ -14,19 +14,19 @@ export class ProductService {
 
   constructor(private http: HttpClient) { }
 
-  getInvoices(): Observable<Product[]> {
+  getProducts(): Observable<Product[]> {
     return this.http.get<Product[]>(this.baseUrl);
   }
 
-  addInvoice(model: Product): Observable<Product> {
+  addProduct(model: Product): Observable<Product> {
     return this.http.post<Product>(this.baseUrl, model);
   }
 
-  deleteInvoice(id: number): Observable<void> {
+  deleteProduct(id: number): Observable<void> {
     return this.http.delete<void>(`${this.baseUrl}/${id}`);
   }
 
-  updateInvoice(model: Product, id: number): Observable<Product> {
+  updateProduct(model: Product, id: number): Observable<Product> {
     return this.http.put<Product>(`${this.baseUrl}/${id}`, model);
   }
 }

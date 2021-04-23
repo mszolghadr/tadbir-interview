@@ -3,6 +3,7 @@ using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using tadbir.Service.DTOs.InvoiceDTOs;
 using tadbir.Service.Interfaces;
@@ -56,7 +57,6 @@ namespace tadbir.API.Controllers
             try
             {
                 return Ok(await _invoiceService.EditInvoiceAsync(dto, id, cancellationToken));
-
             }
             catch (KeyNotFoundException)
             {

@@ -16,6 +16,9 @@ namespace tadbir.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<InvoiceRow>().HasKey(e => new { e.InvoiceId, e.ProductId });
+            modelBuilder.Entity<InvoiceRow>()
+                .HasOne(a => a.Product)
+                .WithMany().OnDelete(DeleteBehavior.Restrict);
             base.OnModelCreating(modelBuilder);
         }
     }
