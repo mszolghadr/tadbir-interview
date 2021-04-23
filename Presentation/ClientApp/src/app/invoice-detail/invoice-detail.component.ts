@@ -20,6 +20,7 @@ export class InvoiceDetailComponent implements OnInit {
   @Input() mode = 'NEW';
   invoiceForm: FormGroup = new FormGroup({});
   productList: KeyValue<number, string>[] = [];
+  date = new Date(Date.now()).toLocaleDateString('fa-IR');
 
   constructor(
     private fb: FormBuilder,
@@ -83,6 +84,10 @@ export class InvoiceDetailComponent implements OnInit {
 
   add(): void {
     this.invoiceItems.push(this.newRow());
+  }
+
+  del(index: number): void {
+    this.invoiceItems.removeAt(index);
   }
 
   submit(): void {
