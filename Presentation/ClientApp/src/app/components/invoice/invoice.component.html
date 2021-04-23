@@ -6,7 +6,7 @@
     <th>تاریخ</th>
     <th>
       <p class="d-flex justify-content-center mb-0">
-        <i class="bi-plus-square-fill icon text-primary" (click)="add()"></i>
+        <i class="bi-plus-square-fill icon text-primary" (click)="add()" title="فاکتور جدید"></i>
       </p>
     </th>
   </thead>
@@ -18,9 +18,9 @@
       <td>{{item.createdOnUtc | persianDate: 'dateOnly'}}</td>
       <td>
         <div class="row container-sm justify-content-center">
-          <i class="bi-binoculars icon" (click)="view(item)"></i>
-          <i class="bi-pencil-square icon" (click)="edit(item)"></i>
-          <i class="bi-trash icon" (click)="del(item.id)"></i>
+          <i class="bi-binoculars icon" (click)="view(item)" title="مشاهده فاکتور"></i>
+          <i class="bi-pencil-square icon" (click)="edit(item)" title="ویرایش فاکتور"></i>
+          <i class="bi-trash icon" (click)="del(item.id)" title="حذف فاکتور"></i>
         </div>
       </td>
     </tr>

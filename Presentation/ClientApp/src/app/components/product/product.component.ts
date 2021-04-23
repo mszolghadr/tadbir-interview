@@ -1,11 +1,11 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { Product } from '../models/product.model';
-import { ToastMessage } from '../models/toast.model';
-import { ProductService } from '../services/product.service';
-import { ToastService } from '../services/toast.service';
-import { ConfirmModalComponent } from '../shared/confirm-modal.component';
+import { Product } from '../../models/product.model';
+import { ToastMessage } from '../../models/toast.model';
+import { ProductService } from '../../services/product.service';
+import { ToastService } from '../../services/toast.service';
+import { ConfirmModalComponent } from '../../shared/confirm-modal.component';
 
 @Component({
   selector: 'app-product-component',

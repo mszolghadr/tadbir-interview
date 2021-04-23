@@ -3,11 +3,11 @@ import { Component, Input, OnInit } from '@angular/core';
 import { AbstractControl, FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { resourceUsage } from 'process';
-import { InvoiceItem } from '../models/invoice-detail.model';
-import { InvoiceDetailedItem } from '../models/invoice-detailed-item.model';
-import { InvoiceList } from '../models/invoice-list.model';
-import { InvoiceService } from '../services/invoice.service';
-import { ProductService } from '../services/product.service';
+import { InvoiceItem } from '../../models/invoice-detail.model';
+import { InvoiceDetailedItem } from '../../models/invoice-detailed-item.model';
+import { InvoiceList } from '../../models/invoice-list.model';
+import { InvoiceService } from '../../services/invoice.service';
+import { ProductService } from '../../services/product.service';
 
 @Component({
   selector: 'app-invoice-detail',

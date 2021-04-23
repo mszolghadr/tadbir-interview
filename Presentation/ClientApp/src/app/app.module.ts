@@ -5,14 +5,14 @@ import { HttpClientModule } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
 
 import { AppComponent } from './app.component';
-import { NavMenuComponent } from './nav-menu/nav-menu.component';
-import { HomeComponent } from './home/home.component';
-import { ProductComponent } from './product/product.component';
-import { FetchDataComponent as InvoiceComponent } from './invoice/invoice.component';
+import { NavMenuComponent } from './components/nav-menu/nav-menu.component';
+import { HomeComponent } from './components/home/home.component';
+import { ProductComponent } from './components/product/product.component';
+import { FetchDataComponent as InvoiceComponent } from './components/invoice/invoice.component';
 import { NgbModalModule, NgbModule, NgbToastModule } from '@ng-bootstrap/ng-bootstrap';
 import { ToastsContainerComponent } from './shared/toast-container.component';
 import { PersianDatePipe } from './shared/persian-date.pipe';
-import { InvoiceDetailComponent } from './invoice-detail/invoice-detail.component';
+import { InvoiceDetailComponent } from './components/invoice-detail/invoice-detail.component';
 
 @NgModule({
   declarations: [

@@ -1,10 +1,10 @@
 import { Component } from '@angular/core';
 import { NgbModal, NgbModalOptions } from '@ng-bootstrap/ng-bootstrap';
 import { InvoiceDetailComponent } from '../invoice-detail/invoice-detail.component';
-import { InvoiceList } from '../models/invoice-list.model';
-import { InvoiceService } from '../services/invoice.service';
-import { ToastService } from '../services/toast.service';
-import { ConfirmModalComponent } from '../shared/confirm-modal.component';
+import { InvoiceList } from '../../models/invoice-list.model';
+import { InvoiceService } from '../../services/invoice.service';
+import { ToastService } from '../../services/toast.service';
+import { ConfirmModalComponent } from '../../shared/confirm-modal.component';
 
 @Component({
   selector: 'app-invoice',
